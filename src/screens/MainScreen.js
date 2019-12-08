@@ -1,28 +1,40 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { DATA } from "../data";
+import { AppHeaderIcon } from "../components/AppHeaderIcon";
+import PostList from "../components/PostList";
 
 const MainScreen = ({ navigation }) => {
-  const goToPost = () => {
-    navigation.navigate("Post");
+  const openPostHandler = post => {
+    navigation.navigate("Post", {
+      postId: post.id,
+      date: post.date,
+      booked: post.booked
+    });
   };
-  return (
-    <View style={styles.center}>
-      <Text>MAIN</Text>
-      <Button title="go to post" onPress={goToPost} />
-    </View>
-  );
+  return <PostList data={DATA} onOpen={openPostHandler} />;
 };
 
-MainScreen.navigationOptions = {
-  headerTitle: "My blog"
-};
-
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
+MainScreen.navigationOptions = ({ navigation }) => ({
+  headerTitle: "My blog",
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+      <Item
+        title="Take photo"
+        iconName="ios-camera"
+        onPress={() => navigation.navigate("Create")}
+      />
+    </HeaderButtons>
+  ),
+  headerLeft: (
+    <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+      <Item
+        title="Toggle drawer"
+        iconName="ios-menu"
+        onPress={() => navigation.toggleDrawer()}
+      />
+    </HeaderButtons>
+  )
 });
 
 export default MainScreen;

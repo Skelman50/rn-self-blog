@@ -1,20 +1,37 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
-const BookedScreen = () => {
+import { DATA } from "../data";
+import { AppHeaderIcon } from "../components/AppHeaderIcon";
+import PostList from "../components/PostList";
+
+const BookedScreen = ({ navigation }) => {
+  const openPostHandler = post => {
+    navigation.navigate("Post", {
+      postId: post.id,
+      date: post.date,
+      booked: post.booked
+    });
+  };
   return (
-    <View style={styles.center}>
-      <Text>CREATE</Text>
-    </View>
+    <PostList
+      data={DATA.filter(post => post.booked)}
+      onOpen={openPostHandler}
+    />
   );
 };
 
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
+BookedScreen.navigationOptions = ({ navigation }) => ({
+  headerTitle: "Favorites",
+  headerLeft: (
+    <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+      <Item
+        title="Toggle drawer"
+        iconName="ios-menu"
+        onPress={() => navigation.toggleDrawer()}
+      />
+    </HeaderButtons>
+  )
 });
 
 export default BookedScreen;
