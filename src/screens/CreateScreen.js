@@ -6,7 +6,6 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Image,
   Button,
   ScrollView,
   TouchableWithoutFeedback,
@@ -15,23 +14,26 @@ import {
 import { AppHeaderIcon } from "../components/AppHeaderIcon";
 import { THEME } from "../theme";
 import { addPost } from "../store/actions/postActions";
+import PhotoPicker from "../components/PhotoPicker";
 
 const CreateScreen = ({ navigation }) => {
   const [text, setText] = useState("");
+  const [currentImg, setCurrentImg] = useState(null);
   const dispatch = useDispatch();
-
-  const img =
-    "https://cdn.londonandpartners.com/visit/general-london/areas/river/76709-640x360-houses-of-parliament-and-london-eye-on-thames-from-above-640.jpg";
 
   const createPostHandler = () => {
     const post = {
       date: new Date().toJSON(),
       text,
-      img,
+      img: currentImg,
       booked: false
     };
     dispatch(addPost(post));
     navigation.navigate("Main");
+  };
+
+  const photoPickHandler = uri => {
+    setCurrentImg(uri);
   };
   return (
     <ScrollView>
@@ -45,16 +47,12 @@ const CreateScreen = ({ navigation }) => {
             onChangeText={setText}
             multiline
           />
-          <Image
-            style={{ width: "100%", height: 200, marginBottom: 10 }}
-            source={{
-              uri: img
-            }}
-          />
+          <PhotoPicker onPick={photoPickHandler} />
           <Button
             title="Create a post"
             color={THEME.MAIN_COLOR}
             onPress={createPostHandler}
+            disabled={!text || !currentImg}
           />
         </View>
       </TouchableWithoutFeedback>
