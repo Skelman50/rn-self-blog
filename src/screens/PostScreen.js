@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { THEME } from "../theme";
 import { AppHeaderIcon } from "../components/AppHeaderIcon";
-import { togglePost } from "../store/actions/postActions";
+import { togglePost, removePost } from "../store/actions/postActions";
 
 const PostScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -40,18 +40,27 @@ const PostScreen = ({ navigation }) => {
 
   const removeHandler = () => {
     Alert.alert(
-      "Deletning post",
+      "Deleting post",
       "Are you sure?",
       [
         {
           text: "Cancel",
           style: "cancel"
         },
-        { text: "Delete", onPress: () => console.log("OK Pressed") }
+        {
+          text: "Delete",
+          onPress() {
+            navigation.navigate("Main");
+            dispatch(removePost(postId));
+          }
+        }
       ],
       { cancelable: false }
     );
   };
+  if (!post) {
+    return null;
+  }
   return (
     <ScrollView>
       <Image source={{ uri: post.img }} style={styles.image} />
