@@ -1,9 +1,13 @@
 import { LOAD_POSTS, TOGGLE_BOOKED, REMOVE_POST, ADD_POST } from "../types";
+import { DB } from "../../db";
 
 export const loadPost = () => {
-  return {
-    type: LOAD_POSTS,
-    payload: []
+  return async dispatch => {
+    const posts = await DB.getPosts();
+    dispatch({
+      type: LOAD_POSTS,
+      payload: posts
+    });
   };
 };
 
@@ -21,10 +25,9 @@ export const removePost = id => {
   };
 };
 
-export const addPost = post => {
-  post.id = Date.now().toString();
-  return {
+export const addPost = post => async dispatch => {
+  dispatch({
     type: ADD_POST,
     payload: post
-  };
+  });
 };
