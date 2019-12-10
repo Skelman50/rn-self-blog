@@ -27,8 +27,8 @@ const PostScreen = ({ navigation }) => {
   );
 
   const toggleHandler = useCallback(() => {
-    dispatch(togglePost(postId));
-  }, [dispatch, postId]);
+    dispatch(togglePost(post));
+  }, [dispatch, post]);
 
   useEffect(() => {
     navigation.setParams({ toggleHandler });
